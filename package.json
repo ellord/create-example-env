@@ -2,10 +2,15 @@
   "name": "create-example-env",
   "version": "1.0.0",
   "description": "Create an example env file based on process.env usage from your source code",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "tsc -w"
   },
   "author": "Ellord Tayag",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.4.2"
+  }
 }
