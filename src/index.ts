@@ -10,7 +10,7 @@ const project = new Project({
 
 const sourceFiles = project.getSourceFiles();
 
-const envs: string[] = [];
+const envs = new Set<string>();
 
 sourceFiles.forEach((sourceFile) => {
   sourceFile.forEachDescendant((node) => {
@@ -26,7 +26,7 @@ sourceFiles.forEach((sourceFile) => {
                   SyntaxKind.Identifier
                 );
                 if (firstIdentifier) {
-                  envs.push(firstIdentifier.getText());
+                  envs.add(firstIdentifier.getText());
                 }
               }
             });
@@ -41,7 +41,7 @@ sourceFiles.forEach((sourceFile) => {
               node
                 .getChildrenOfKind(SyntaxKind.BindingElement)
                 .forEach((env) => {
-                  envs.push(env.getText());
+                  envs.add(env.getText());
                 });
             }
           }
