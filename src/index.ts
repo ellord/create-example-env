@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import { Project, SyntaxKind } from 'ts-morph';
+import { Project } from 'ts-morph';
+import { extractEnvsFromSourceFile } from './extractEnvsFromSourceFile';
 
 const tsConfigFilePath = process.argv[2];
 
@@ -11,46 +12,9 @@ const project = new Project({
 const sourceFiles = project.getSourceFiles();
 
 const envs = new Set<string>();
-
 sourceFiles.forEach((sourceFile) => {
-  sourceFile.forEachDescendant((node) => {
-    switch (node.getKind()) {
-      // e.g. process.env.HELLO
-      case SyntaxKind.PropertyAccessExpression:
-        if (node.getChildren().length === 3) {
-          node
-            .getChildrenOfKind(SyntaxKind.PropertyAccessExpression)
-            .forEach((children) => {
-              if (children.getText() == 'process.env') {
-                const firstIdentifier = node.getFirstChildByKind(
-                  SyntaxKind.Identifier
-                );
-                if (firstIdentifier) {
-                  envs.add(firstIdentifier.getText());
-                }
-              }
-            });
-        }
-        break;
-
-      // e.g. const { HELLO, WORLD } = process.env
-      case SyntaxKind.ObjectBindingPattern:
-        node.getNextSiblings().forEach((sibling) => {
-          if (sibling.getKind() === SyntaxKind.PropertyAccessExpression) {
-            if (sibling.getText() === 'process.env') {
-              node
-                .getChildrenOfKind(SyntaxKind.BindingElement)
-                .forEach((env) => {
-                  envs.add(env.getText());
-                });
-            }
-          }
-        });
-        break;
-
-      default:
-    }
-  });
+  const envsFromSourceFile = extractEnvsFromSourceFile(sourceFile);
+  envsFromSourceFile.forEach(envs.add, envs);
 });
 
 console.log('envs', envs);
