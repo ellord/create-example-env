@@ -1,0 +1,11 @@
+{
+  "name": "create-example-env",
+  "version": "1.0.0",
+  "description": "Create an example env file based on process.env usage from your source code",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ellord Tayag",
+  "license": "MIT"
+}
