@@ -10,14 +10,23 @@
     "node": ">=12"
   },
   "scripts": {
-    "build": "tsc && chmod u+x dist/index.js",
-    "start": "node dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run build:types && npm run build:js",
+    "build:js": "babel src --out-dir dist --extensions \".ts\" --source-maps inline && chmod u+x dist/index.js",
+    "build:types": "tsc --emitDeclarationOnly",
+    "start": "babel-node -x \".ts\" src/index.ts",
+    "type-check": "tsc --noEmit",
+    "type-check:watch": "npm run type-check -- --watch",
     "watch": "tsc -w"
   },
   "author": "Ellord Tayag",
   "license": "MIT",
   "devDependencies": {
+    "@babel/cli": "^7.15.4",
+    "@babel/core": "^7.15.5",
+    "@babel/node": "^7.15.4",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/preset-env": "^7.15.4",
+    "@babel/preset-typescript": "^7.15.0",
     "@types/node": "^12.12.6",
     "prettier": "^2.3.2",
     "typescript": "^4.4.2"
