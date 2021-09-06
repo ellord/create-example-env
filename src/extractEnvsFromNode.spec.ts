@@ -1,24 +1,11 @@
-import { Node, Project, SyntaxKind } from 'ts-morph';
+import { Node, SyntaxKind } from 'ts-morph';
+
 import { extractEnvsFromNode } from './extractEnvsFromNode';
+import { generateTestSourceFile } from './testUtils/generateTestSourceFile';
 
 describe('extractEnvsFromNode', () => {
   it('should return envs for given nodes', () => {
-    const NUM_OF_TEST_EVS = 50;
-
-    const expectedSet = new Set<string>();
-    let sourceFileText = '';
-
-    for (let i = 0; i < NUM_OF_TEST_EVS; i++) {
-      if (i % 2) {
-        sourceFileText += `process.env.TEST_${i};`;
-      } else {
-        sourceFileText += `const { TEST_${i} } = process.env;`;
-      }
-      expectedSet.add(`TEST_${i}`);
-    }
-
-    const project = new Project();
-    const testSourceFile = project.createSourceFile('file.ts', sourceFileText);
+    const { expectedSet, testSourceFile } = generateTestSourceFile();
 
     const propertyAccessExpressionNodes = testSourceFile.getDescendantsOfKind(
       SyntaxKind.PropertyAccessExpression
