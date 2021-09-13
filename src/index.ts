@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import { Project } from 'ts-morph';
+
+import { createExampleEnvFromEnvs } from './createExampleEnvFromEnvs';
 import { extractEnvsFromSourceFile } from './extractEnvsFromSourceFile';
 
 const tsConfigFilePath = process.argv[2];
@@ -17,4 +19,4 @@ sourceFiles.forEach((sourceFile) => {
   envsFromSourceFile.forEach(envs.add, envs);
 });
 
-console.log('envs', envs);
+createExampleEnvFromEnvs(envs);
