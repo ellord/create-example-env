@@ -1,21 +1,15 @@
 import { Project } from 'ts-morph';
 
-const NUMBER_OF_TEST_EVS = 50;
+import { generateCodeWithEnvs } from './generateSourceFileText';
 
-export const generateTestSourceFile = (
-  numberOfTestEnvs = NUMBER_OF_TEST_EVS
-) => {
+export const generateTestSourceFile = () => {
   const expectedSet = new Set<string>();
-  let sourceFileText = '';
 
-  for (let i = 0; i < numberOfTestEnvs; i++) {
-    if (i % 2) {
-      sourceFileText += `process.env.TEST_${i};`;
-    } else {
-      sourceFileText += `const { TEST_${i} } = process.env;`;
-    }
-    expectedSet.add(`TEST_${i}`);
-  }
+  const sourceFileText = generateCodeWithEnvs({
+    callback: (env) => {
+      expectedSet.add(env);
+    },
+  });
 
   const project = new Project();
   const testSourceFile = project.createSourceFile('file.ts', sourceFileText);
