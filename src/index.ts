@@ -1,11 +1,22 @@
-#!/usr/bin/env node
+#!/usr/bin/env node --experimental-specifier-resolution=node
 
 import * as path from 'path';
+import meow from 'meow';
 
 import { Project } from 'ts-morph';
 
 import { createExampleEnvFromEnvs } from './createExampleEnvFromEnvs';
 import { extractEnvsFromSourceFile } from './extractEnvsFromSourceFile';
+
+const cli = meow(
+  `
+  Usage
+`,
+  {
+    importMeta: import.meta,
+  }
+);
+console.log(cli);
 
 const tsConfigFilePath = process.argv[2];
 
